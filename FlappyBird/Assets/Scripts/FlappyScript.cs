@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Spritesheet for Flappy Bird found here: http://www.spriters-resource.com/mobile_phone/flappybird/sheet/59537/
-/// Audio for Flappy Bird found here: https://www.sounds-resource.com/mobile/flappybird/sound/5309/
-/// </summary>
 public class FlappyScript : MonoBehaviour
 {
 
@@ -30,10 +26,11 @@ public class FlappyScript : MonoBehaviour
     }
 
     Vector3 birdRotation = Vector3.zero;
+
     // Update is called once per frame
+    [System.Obsolete]
     void Update()
     {
-        //handle back key in Windows Phone
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
 
@@ -68,7 +65,7 @@ public class FlappyScript : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
                 contactPoint = Input.mousePosition;
 
-            //check if user wants to restart the game
+           // Check User restart game
             if (restartButtonGameCollider == Physics2D.OverlapPoint
                 (Camera.main.ScreenToWorldPoint(contactPoint)))
             {
@@ -82,12 +79,10 @@ public class FlappyScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        //just jump up and down on intro screen
         if (GameStateManager.GameState == GameState.Intro)
         {
-            if (GetComponent<Rigidbody2D>().velocity.y < -1) //when the speed drops, give a boost
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, GetComponent<Rigidbody2D>().mass * 5500 * Time.deltaTime)); //lots of play and stop 
-                                                        //and play and stop etc to find this value, feel free to modify
+            if (GetComponent<Rigidbody2D>().velocity.y < -1)
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, GetComponent<Rigidbody2D>().mass * 5500 * Time.deltaTime));
         }
         else if (GameStateManager.GameState == GameState.Playing || GameStateManager.GameState == GameState.Dead)
         {
@@ -115,11 +110,6 @@ public class FlappyScript : MonoBehaviour
         GetComponent<AudioSource>().PlayOneShot(FlyAudioClip);
     }
 
-
-
-    /// <summary>
-    /// when the flappy goes up, it'll rotate up to 45 degrees. when it falls, rotation will be -90 degrees min
-    /// </summary>
     private void FixFlappyRotation()
     {
         if (GetComponent<Rigidbody2D>().velocity.y > 0) flappyYAxisTravelState = FlappyYAxisTravelState.GoingUp;
@@ -140,20 +130,16 @@ public class FlappyScript : MonoBehaviour
         }
         //solution with negative eulerAngles found here: http://answers.unity3d.com/questions/445191/negative-eular-angles.html
 
-        //clamp the values so that -90<rotation<45 *always*
         birdRotation = new Vector3(0, 0, Mathf.Clamp(birdRotation.z + degreesToAdd, -90, 45));
         transform.eulerAngles = birdRotation;
     }
 
-    /// <summary>
-    /// check for collision with pipes
-    /// </summary>
-    /// <param name="col"></param>
+  
     void OnTriggerEnter2D(Collider2D col)
     {
         if (GameStateManager.GameState == GameState.Playing)
         {
-            if (col.gameObject.tag == "Pipeblank") //pipeblank is an empty gameobject with a collider between the two pipes
+            if (col.gameObject.tag == "Pipeblank")
             {
                 GetComponent<AudioSource>().PlayOneShot(ScoredAudioClip);
                 ScoreManagerScript.Score++;

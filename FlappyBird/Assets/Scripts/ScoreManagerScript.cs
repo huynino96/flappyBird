@@ -14,11 +14,10 @@ public class ScoreManagerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (previousScore != Score) //save perf from non needed calculations
+        if (previousScore != Score) 
         { 
             if(Score < 10)
             {
-                //just draw units
                 Units.sprite = numberSprites[Score];
             }
             else if(Score >= 10 && Score < 100)

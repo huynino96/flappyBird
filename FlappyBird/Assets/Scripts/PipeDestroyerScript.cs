@@ -10,7 +10,7 @@ using UnityEngine;
         void OnTriggerEnter2D(Collider2D col)
         {
             if (col.tag == "Pipe" || col.tag == "Pipeblank")
-                Destroy(col.gameObject.transform.parent.gameObject); //free up some memory
+                Destroy(col.gameObject.transform.parent.gameObject); // Destroy Pip to free up memory
         }
     }
 
